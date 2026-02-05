@@ -1,0 +1,26 @@
+# Variables
+variable "project_id" {
+  description = "GCP Project ID"
+  type        = string
+}
+
+variable "region" {
+  description = "GCP Region"
+  type        = string
+  default     = "europe-west1"
+}
+
+variable "zone" {
+  description = "GCP Zone"
+  type        = string
+  default     = "europe-west1-b"
+}
+
+variable "cluster_name" {
+  description = "GKE Cluster Name"
+  type        = string
+  default     = "my-gke-cluster"
+}
+# variable "gcp_dns_managed_zone" {
+#   description = "DNS Zone"
+# }
