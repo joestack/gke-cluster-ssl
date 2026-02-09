@@ -21,6 +21,11 @@ variable "cluster_name" {
   type        = string
   default     = "my-gke-cluster"
 }
-# variable "gcp_dns_managed_zone" {
-#   description = "DNS Zone"
-# }
+
+variable "gcp_dns_zone" {
+  description = "DNS Zone"
+}
+
+variable "dns_hostname" {
+  description = "Hostname to be used for the A-Record (i.eg. artifactorytest)"
+}
