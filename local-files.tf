@@ -2,7 +2,7 @@ resource "local_file" "jfrog_ingress_values" {
   filename = "${path.module}/generated/ingress-values.yaml"
   
   content = templatefile("${path.module}/templates/ingress-values.yaml.tftpl", {
-    # Note: GCP DNS records often return with a trailing dot (e.g., "joe.rodolphef.org.")
+    # Note: GCP DNS records often return with a trailing dot (e.g., "joe.rod.org.")
     # trimsuffix ensures Kubernetes doesn't throw a validation error on the Ingress host.
     hostname       = trimsuffix(google_dns_record_set.artifactory.name, ".")
     static_ip_name = google_compute_global_address.artifactory_ip.name
