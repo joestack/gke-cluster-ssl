@@ -1,0 +1,37 @@
+global:
+  masterKey: "${master_key}"
+  joinKey: "${join_key}"
+  # For the umbrella chart, setting the external ingress URL is a good practice
+  jfrogUrl: "${hostname}"
+  # ADD THIS: Force Xray to use internal GKE networking to join the cluster.
+  # Format: http://<release-name>-artifactory:8082
+  joinUrl: "http://jfrog-platform-artifactory:8082"
+
+# Application-Specific Toggles
+rabbitmq:
+  enabled: true
+
+# Xray Specific Configuration
+xray:
+# Add this new 'server' block to inject the environment variables
+  server:
+    extraEnvironmentVariables:
+      - name: GOCACHE
+        value: "/opt/jfrog/xray/var/tmp/gocache"
+      - name: GOMODCACHE
+        value: "/opt/jfrog/xray/var/tmp/gomodcache"
+  xray:
+    extraSystemYaml:
+      server:
+        dbSync:
+          version3:
+            enabled: true
+
+# Artifactory Security & License Configuration
+artifactory:
+  artifactory:
+    admin:
+      password: "${admin_password}"
+    license:
+      secret: artifactory-cluster-license
+      dataKey: art.lic

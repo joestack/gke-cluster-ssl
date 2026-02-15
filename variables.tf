@@ -19,7 +19,7 @@ variable "zone" {
 variable "cluster_name" {
   description = "GKE Cluster Name"
   type        = string
-  default     = "my-gke-cluster"
+  default     = "joern-gke-cluster"
 }
 
 variable "gcp_dns_zone" {
@@ -28,4 +28,10 @@ variable "gcp_dns_zone" {
 
 variable "dns_hostname" {
   description = "Hostname to be used for the A-Record (i.eg. artifactorytest)"
+}
+
+variable "jfrog_admin_password" {
+  description = "The initial admin password for Artifactory"
+  type        = string
+  sensitive   = true
 }

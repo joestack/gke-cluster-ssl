@@ -1,0 +1,129 @@
+#prerequisites
+kubectl create namespace frog-platform
+
+export MASTER_KEY=$(openssl rand -hex 32)
+echo ${MASTER_KEY}
+kubectl create secret generic my-masterkey-secret -n jfrog-platform --from-literal=master-key=${MASTER_KEY}
+
+export JOIN_KEY=$(openssl rand -hex 32)
+echo ${JOIN_KEY}
+kubectl create secret generic my-joinkey-secret -n jfrog-platform --from-literal=join-key=${JOIN_KEY}
+
+kubectl create secret generic artifactory-cluster-license --from-file=./art.lic -n jfrog-platform
+
+
+
+#install
+helm upgrade --install jfrog-platform jfrog/jfrog-platform \
+  --set artifactory.replicaCount=1 \
+  --set artifactory.masterKey=${MASTER_KEY} \
+  --set artifactory.joinKey=${JOIN_KEY} \
+  --namespace jfrog-platform --create-namespace  -f override-values.yaml
+
+
+helm upgrade --install jfrog-platform jfrog/jfrog-platform \
+  --set artifactory.replicaCount=1 \
+  --namespace jfrog-platform --create-namespace  -f override-values.yaml
+
+
+helm upgrade --install jfrog-platform \
+  -f values4.yaml \
+  -f sizing/platform-small.yaml \
+  --set global.masterKey=${MASTER_KEY} \
+  --set global.joinKey=${JOIN_KEY} \
+  --namespace jfrog-platform --create-namespace \
+  jfrog/jfrog-platform
+
+
+kubectl create secret generic artifactory-cluster-license --from-file=./art.lic -n jfrog-platform
+
+
+
+#uninstall
+helm uninstall jfrog-platform -n jfrog-platform
+
+
+# README.md
+
+This Terraform code is supporti
+
+First take a look to variables.tf and define meaningful values in a `terraform.tfvars` file.
+
+```shell
+terraform init
+terraform plan
+terraform apply
+```
+
+```shell
+gcloud container clusters get-credentials $(terraform output -raw cluster_name) --region $(terraform output -raw zone) --project $(terraform output -raw project)
+```
+
+
+
+
+Don't forget to clean up afterwards.
+
+```shell
+terraform destroy
+```
+
+Prerequisites: Install and configure gcloud  
+
+```shell
+brew install gcloud-cli
+
+gcloud components install gke-gcloud-auth-plugin
+
+gcloud auth application-default login
+```
+
+
+
+
+
+NOTES:
+//found in values.yaml
+  ## To enable JFrog Advanced Security(JAS), uncomment below section
+  ## https://jfrog.com/help/r/jfrog-installation-setup-documentation/install-jfrog-advanced-security-on-your-self-hosted-environment-with-helm
+  # serviceAccount:
+  #   create: true
+  # rbac:
+  #   create: true
+
+
+
+
+
+
+
+gcloud container clusters get-credentials my-gke-cluster --zone europe-west1-b --project soleng-dev
+kubectl create namespace jfrog-platform
+kubectl apply -f frontend-config.yaml
+export MASTER_KEY=$(openssl rand -hex 32)
+echo ${MASTER_KEY}
+kubectl create secret generic my-masterkey-secret -n jfrog-platform --from-literal=master-key=${MASTER_KEY}
+
+export JOIN_KEY=$(openssl rand -hex 32)
+echo ${JOIN_KEY}
+kubectl create secret generic my-joinkey-secret -n jfrog-platform --from-literal=join-key=${JOIN_KEY}
+
+kubectl create secret generic artifactory-cluster-license --from-file=./art.lic -n jfrog-platform
+
+
+
+helm upgrade --install jfrog-platform \
+  -f values.yaml \
+  -f db-values.yaml \
+  --set global.masterKey=${MASTER_KEY} \
+  --set global.joinKey=${JOIN_KEY} \
+  --namespace jfrog-platform --create-namespace \
+  jfrog/jfrog-platform
+
+
+helm upgrade --install jfrog-platform \
+  -f values7.yaml \
+  --set global.masterKey=${MASTER_KEY} \
+  --set global.joinKey=${JOIN_KEY} \
+  --namespace jfrog-platform --create-namespace \
+  jfrog/jfrog-platform

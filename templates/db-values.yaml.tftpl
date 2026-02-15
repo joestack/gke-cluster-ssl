@@ -1,0 +1,26 @@
+# Disable the bundled Postgres chart
+postgresql:
+  enabled: false
+
+global:
+  database:
+    initDBCreation: false
+    driver: org.postgresql.Driver
+    url: "jdbc:postgresql://${db_ip}:5432/${artifactory_db}?sslmode=disable"
+    user: "${artifactory_user}"
+    password: "${db_password}"
+
+artifactory:
+  database:
+    driver: org.postgresql.Driver
+    url: "jdbc:postgresql://${db_ip}:5432/${artifactory_db}?sslmode=disable"
+    user: "${artifactory_user}"
+    password: "${db_password}"
+
+xray:
+  enabled: true
+  database:
+    # Xray (Go) needs 'postgres://' format and the password INSIDE the URL
+    url: "postgres://${xray_user}:${db_password}@${db_ip}:5432/${xray_db}?sslmode=disable"
+    user: "${xray_user}"
+    password: "${db_password}"

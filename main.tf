@@ -2,7 +2,7 @@ terraform {
   required_providers {
     google = {
       source  = "hashicorp/google"
-      version = "~> 5.0"
+      version = "~> 7.0"
     }
     kubernetes = {
       source  = "hashicorp/kubernetes"
@@ -53,9 +53,17 @@ resource "google_container_cluster" "primary" {
   network                  = google_compute_network.vpc.name
   subnetwork               = google_compute_subnetwork.subnet.name
 
+  # ip_allocation_policy {
+  #   cluster_secondary_range_name  = "pods"
+  #   services_secondary_range_name = "services"
+  # }
+
+# The cluster is not staring because DB is not accessible
+# Now I'll try this block
+  # ADD THIS BLOCK to make the cluster VPC-Native
   ip_allocation_policy {
-    cluster_secondary_range_name  = "pods"
-    services_secondary_range_name = "services"
+    cluster_ipv4_cidr_block  = "/14"
+    services_ipv4_cidr_block = "/20"
   }
 
   workload_identity_config {

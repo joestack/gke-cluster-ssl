@@ -1,3 +1,6 @@
 project_id = "<your-gcp-project-id>"
 gcp_dns_zone = "<the-NAME-of-your-DNS-Zone>"
 dns_hostname = "<hostname-of-your-platform>"
+jfrog_admin_password = "<your-secure-password>"
+cluster_name = "<my-gke-12345>" #can't be used more than once due to GCP bug, a 2nd deployment might face a zomie resource
+ 
