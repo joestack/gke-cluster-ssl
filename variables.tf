@@ -35,3 +35,13 @@ variable "jfrog_admin_password" {
   type        = string
   sensitive   = true
 }
+
+variable "db_tier" {
+  description = "DB machine size"
+  default     = "db-custom-4-16384"
+}
+
+variable "db_availability_type" {
+  description = "REGIONAL for HA or ZONAL"
+  default     = "ZONAL"
+}

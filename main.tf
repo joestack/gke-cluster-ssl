@@ -158,10 +158,12 @@ resource "google_sql_database_instance" "artifactory_db" {
   depends_on = [google_service_networking_connection.private_vpc_connection]
 
   settings {
-    tier              = "db-custom-2-7680" # Adjust size as needed
+    tier              = var.db_tier
+    #tier              = "db-custom-2-7680" # Adjust size as needed
+    #tier              = "db-custom-4-16384"
     #availability_type = "REGIONAL"         # <--- Enables High Availability
-    availability_type = "ZONAL"         # <--- Disables High Availability
-
+    #availability_type = "ZONAL"         # <--- Disables High Availability
+    availability_type = var.db_availability_type
     ip_configuration {
       ipv4_enabled    = false       # Disable Public IP for security
       private_network = google_compute_network.vpc.id 

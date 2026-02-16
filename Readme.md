@@ -1,4 +1,4 @@
-# 🐸 JFrog Platform on GKE with External Cloud SQL, DNS and SSL certificate (all GCP) 
+# 🐸 JFrog Platform on GKE with External Cloud SQL
 
 Welcome! This project provides a robust, fully automated Terraform setup to deploy the **JFrog Platform (Artifactory & Xray)** on Google Cloud Platform. 
 
@@ -8,7 +8,25 @@ Instead of dealing with manual secret generation or copy-pasting IP addresses, t
 * **Google Kubernetes Engine (GKE):** Provisions the core cluster and networking.
 * **External PostgreSQL (Cloud SQL):** Securely provisions a private Cloud SQL instance, creating dedicated databases and users for both Artifactory and Xray.
 * **Dynamic Helm Values:** Automatically generates `base-values.yaml`, `db-values.yaml`, and `ingress-values.yaml` with injected database IPs, generated passwords, and perfectly formatted 64-character Hex Master/Join keys.
-* **Production-Ready Tweaks:** Includes fixes for GKE Go-cache permission drops and internal Kubernetes DNS routing (to prevent external Load Balancer hairpinning).
+* **Production-Ready Tweaks:** Includes fixes for GKE Go-cache permission drops and internal Kubernetes DNS routing.
+
+---
+
+## ⚙️ Configuration (Variables)
+
+Before applying the Terraform code, you need to define the required variables. The easiest way to do this is by creating a `terraform.tfvars` file in the root directory.
+
+| NAME | DESCRIPTION | MANDATORY | DEFAULT |
+| :--- | :--- | :---: | :--- |
+| `project_id` | GCP Project ID | **Yes** | - |
+| `gcp_dns_zone` | Cloud DNS Zone name where the record will be created | **Yes** | - |
+| `dns_hostname` | Hostname to be used for the A-Record (e.g., `artifactorytest`) | **Yes** | - |
+| `jfrog_admin_password` | The initial admin password for Artifactory | **Yes** | - |
+| `region` | GCP Region for the cluster and database | No | `"europe-west1"` |
+| `zone` | GCP Zone for the GKE cluster | No | `"europe-west1-b"` |
+| `cluster_name` | Name of the GKE Cluster | No | `"joern-gke-cluster"` |
+| `db_tier` | Cloud SQL machine size / instance tier | No | `"db-custom-4-16384"` |
+| `db_availability_type` | Database availability (`REGIONAL` for HA or `ZONAL`) | No | `"ZONAL"` |
 
 ---
 
@@ -60,7 +78,7 @@ kubectl create secret generic artifactory-cluster-license \
 Deploy the JFrog Platform using the official Helm chart, passing in the configuration files that Terraform dynamically generated for you:
 
 ```bash
-helm repo add jfrog [https://charts.jfrog.io](https://charts.jfrog.io)
+helm repo add jfrog https://charts.jfrog.io
 helm repo update
 
 helm upgrade --install jfrog-platform jfrog/jfrog-platform \
