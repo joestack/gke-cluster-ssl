@@ -159,10 +159,6 @@ resource "google_sql_database_instance" "artifactory_db" {
 
   settings {
     tier              = var.db_tier
-    #tier              = "db-custom-2-7680" # Adjust size as needed
-    #tier              = "db-custom-4-16384"
-    #availability_type = "REGIONAL"         # <--- Enables High Availability
-    #availability_type = "ZONAL"         # <--- Disables High Availability
     availability_type = var.db_availability_type
     ip_configuration {
       ipv4_enabled    = false       # Disable Public IP for security
@@ -172,6 +168,11 @@ resource "google_sql_database_instance" "artifactory_db" {
     backup_configuration {
       enabled                        = true
       point_in_time_recovery_enabled = true
+    }
+    # to get rid of DB Sync error at 50% 
+    database_flags {
+      name  = "temp_file_limit"
+      value = "2147483647"  # -1 does not work. 2147483647 (2TB) is the upper limit
     }
   }
   

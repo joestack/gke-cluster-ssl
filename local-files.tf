@@ -33,6 +33,8 @@ resource "local_sensitive_file" "jfrog_base_values" {
     master_key     = random_id.master_key.hex
     join_key       = random_id.join_key.hex
     hostname       = "https://${trimsuffix(google_dns_record_set.artifactory.name, ".")}"
+    gcs_bucket_name = google_storage_bucket.jfrog_filestore.name
+    gcp_sa_email    = google_service_account.jfrog_gcs_sa.email
   })
 }
 

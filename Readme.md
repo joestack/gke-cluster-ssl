@@ -1,4 +1,4 @@
-# 🐸 JFrog Platform on GKE with External Cloud SQL
+# 🐸 JFrog Platform on GKE with SSL, External Cloud SQL and External Storage Bucket
 
 Welcome! This project provides a robust, fully automated Terraform setup to deploy the **JFrog Platform (Artifactory & Xray)** on Google Cloud Platform. 
 

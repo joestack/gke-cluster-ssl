@@ -29,9 +29,29 @@ xray:
 
 # Artifactory Security & License Configuration
 artifactory:
+# 1. Configure K8s-level settings for the sub-chart
+  serviceAccount:
+    create: true
+    annotations:
+      iam.gke.io/gcp-service-account: "${gcp_sa_email}"
+# 2. 
   artifactory:
     admin:
       password: "${admin_password}"
     license:
       secret: artifactory-cluster-license
       dataKey: art.lic
+#    persistence:
+#      type: "google-storage-v2"
+#      googleStorage:
+#        bucketName: "${gcs_bucket_name}"
+#        identityOnly: true
+# 3. The Bulletproof Bypass (Replaces the persistence block)
+    customBinarystoreXml: |
+      <config version="2">
+          <chain template="google-storage-v2"/>
+          <provider id="google-storage-v2" type="google-storage-v2">
+              <bucketName>${gcs_bucket_name}</bucketName>
+              <useInstanceCredentials>true</useInstanceCredentials>
+          </provider>
+      </config>
