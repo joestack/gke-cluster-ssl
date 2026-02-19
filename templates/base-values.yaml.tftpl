@@ -13,6 +13,10 @@ rabbitmq:
 
 # Xray Specific Configuration
 xray:
+  rbac:
+    create: true
+  serviceAccount:
+    create: true
 # Add this new 'server' block to inject the environment variables
   server:
     extraEnvironmentVariables:

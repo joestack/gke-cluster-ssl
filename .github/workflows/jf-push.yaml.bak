@@ -1,0 +1,48 @@
+name: "joe-gke-cluster-ssl"
+
+on:
+  workflow_dispatch:
+    
+  push: # Triggers scan-repo flow for every push to the specified branches
+    branches:
+      - main
+    # paths:
+    #   - 'src/**'
+    #   - 'Dockerfile'
+    #   - 'README.md'
+
+permissions:
+  pull-requests: write
+  contents: read
+  security-events: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup JFrog CLI
+        uses: jfrog/setup-jfrog-cli@v4
+        id: setup-cli
+        env:
+          JF_URL: ${{ vars.JF_URL }}
+          JF_PROJECT: ${{ vars.JF_PROJECT }}
+          # 01 no effect##JFROG_CLI_BUILD_PROJECT: ${{ vars.JF_PROJECT }}
+          ##JFROG_CLI_LOG_LEVEL: DEBUG
+        with:
+          oidc-provider-name: joern-github
+          #version: 2.81.0
+
+      - name: JFrog CLI Test
+        run: |
+          jf rt ping
+
+      - name: JFrog CLI show
+        run: |
+          jf config show
+
+
+ 
