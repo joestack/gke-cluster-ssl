@@ -25,10 +25,28 @@ Before applying the Terraform code, you need to define the required variables. T
 | `region` | GCP Region for the cluster and database | No | `"europe-west1"` |
 | `zone` | GCP Zone for the GKE cluster | No | `"europe-west1-b"` |
 | `cluster_name` | Name of the GKE Cluster | No | `"joern-gke-cluster"` |
+| `cluster_instance` | Machine type to be used in the GKE cluster | No | `"e2-standard-4"` |
 | `db_tier` | Cloud SQL machine size / instance tier | No | `"db-custom-4-16384"` |
 | `db_availability_type` | Database availability (`REGIONAL` for HA or `ZONAL`) | No | `"ZONAL"` |
-
+| `catalog_enable` | Enable JFrog Catalog/Curation feature | No | `false` |
+| `distribution_enable` | Enable JFrog Distribution feature | No | `false` |
+| `runtime_enable` | Enable generation of the JFrog Runtime Security values file | No | `false` |
+| `worker_enable` | Enable JFrog Execution Worker (for Contextual Analysis) | No | `false` |
 ---
+
+### 🚀 Advanced Enterprise+ Features
+
+This Terraform project natively supports deploying JFrog's advanced DevSecOps and Enterprise+ microservices. By default, these are set to `false` to save compute resources for standard deployments. 
+
+You can enable them in your `terraform.tfvars` file.
+
+* **`catalog_enable` (JFrog Catalog & Curation):** Deploys the central intelligence database for global packages and CVEs. This is required to power JFrog Curation, acting as a firewall to actively block malicious or highly vulnerable open-source packages from entering your proxy caches.
+* **`worker_enable` (JFrog Execution Worker):** Enables the dedicated scanning engine for Contextual Analysis, Infrastructure as Code (IaC) scanning, and Secrets detection. It works by dynamically spinning up temporary Kubernetes Batch Jobs to perform deep scans on your containers.
+* **`distribution_enable` (JFrog Distribution):** Spins up the Distribution microservice, allowing you to package immutable Release Bundles and distribute them securely to remote edge nodes. *(Note: Terraform automatically provisions the required dedicated Cloud SQL database for this when enabled).*
+* **`runtime_enable` (JFrog Runtime Security):** Generates a dedicated `runtime-values.yaml` file and provides the exact Helm command needed to deploy Runtime K8s sensors. These lightweight DaemonSets monitor live cluster traffic and match running workloads against your Xray vulnerability database.
+
+> **⚠️ Compute & License Warning:** > Enabling these features (especially Catalog and Worker) requires significant CPU and memory. If you set these to `true`, ensure your `cluster_instance` variable is set to a robust machine type (e.g., `e2-standard-8`) and your cluster can autoscale. These features also require an active **Enterprise X** or **Enterprise+** license.
+
 
 ## 🛠️ Prerequisites
 
@@ -85,7 +103,8 @@ helm upgrade --install jfrog-platform jfrog/jfrog-platform \
   --namespace jfrog-platform \
   -f generated/base-values.yaml \
   -f generated/ingress-values.yaml \
-  -f generated/db-values.yaml
+  -f generated/db-values.yaml \
+  -f generated/xtra-values.yaml
 ```
 
 You can monitor the deployment progress by watching the pods:
