@@ -6,9 +6,8 @@ Instead of dealing with manual secret generation or copy-pasting IP addresses, t
 
 ### ✨ Key Features
 * **Google Kubernetes Engine (GKE):** Provisions the core cluster and networking.
-* **External PostgreSQL (Cloud SQL):** Securely provisions a private Cloud SQL instance, creating dedicated databases and users for both Artifactory and Xray.
-* **Dynamic Helm Values:** Automatically generates `base-values.yaml`, `db-values.yaml`, and `ingress-values.yaml` with injected database IPs, generated passwords, and perfectly formatted 64-character Hex Master/Join keys.
-* **Production-Ready Tweaks:** Includes fixes for GKE Go-cache permission drops and internal Kubernetes DNS routing.
+* **External PostgreSQL (Cloud SQL):** Provisions a private Cloud SQL instance, creating dedicated databases and users for both Artifactory and Xray.
+* **Dynamic Helm Values:** Automatically generates `base-values.yaml`, `db-values.yaml`, and `ingress-values.yaml` with injected database IPs, generated passwords, and Master/Join keys.
 
 ---
 
@@ -19,7 +18,7 @@ Before applying the Terraform code, you need to define the required variables. T
 | NAME | DESCRIPTION | MANDATORY | DEFAULT |
 | :--- | :--- | :---: | :--- |
 | `project_id` | GCP Project ID | **Yes** | - |
-| `gcp_dns_zone` | Cloud DNS Zone name where the record will be created | **Yes** | - |
+| `gcp_dns_zone` | Cloud DNS Zone name where the record will be created (use `gcloud dns managed-zones list`) | **Yes** | - |
 | `dns_hostname` | Hostname to be used for the A-Record (e.g., `artifactorytest`) | **Yes** | - |
 | `jfrog_admin_password` | The initial admin password for Artifactory | **Yes** | - |
 | `region` | GCP Region for the cluster and database | No | `"europe-west1"` |
@@ -35,9 +34,22 @@ Before applying the Terraform code, you need to define the required variables. T
 | `worker_enable` | Enable JFrog Execution Worker (for Contextual Analysis) | No | `false` |
 ---
 
+### 🛑 A Friendly Disclaimer: Walk Before You Run
+
+The JFrog Platform Helm chart is an incredibly powerful and well-engineered tool, but it is also highly complex. Before you flip all the advanced feature toggles to `true`, **we highly recommend starting simple.**
+
+Deploy the basic setup first using the default variable states. It is completely normal to need a few installation trials (and teardowns) to fully grasp how the persistence, databases, and microservices wire together. Get the core platform humming first, then introduce the advanced Enterprise+ features.
+
+Finally, keep in mind that by deploying this architecture, you are standing up the heart of a Software Supply Chain (SSC). You are quite literally dealing with the "keys to the kingdom." Please be incredibly mindful of the following:
+
+* **Your `art.lic` File:** This is your enterprise license. Never commit this to version control.
+* **Your `terraform.tfstate` File:** By design, Terraform stores generated database passwords, root credentials, and your JFrog Join Key in *plain text* inside the state file. Ensure your state is stored securely (e.g., in a locked-down GCS backend) and never pushed to GitHub.
+* **Cloud Credentials & Consumption:** Advanced features like Catalog and the Execution Workers require serious compute power to process vulnerability data. Keep a close eye on your GCP billing and GKE node scaling so you don't accidentally burn through your cloud budget!
+
+
 ### 🚀 Advanced Enterprise+ Features
 
-This Terraform project natively supports deploying JFrog's advanced DevSecOps and Enterprise+ microservices. By default, these are set to `false` to save compute resources for standard deployments. 
+This Terraform project natively supports deploying JFrog's advanced DevSecOps and Enterprise+ microservices. By default, these are set to `false` to save compute resources. 
 
 You can enable them in your `terraform.tfvars` file.
 
@@ -57,7 +69,7 @@ Before you begin, ensure you have the following installed and configured:
 * [Kubernetes CLI (`kubectl`)](https://kubernetes.io/docs/tasks/tools/)
 * [Helm](https://helm.sh/docs/intro/install/)
 * A valid JFrog Artifactory license file named `art.lic` located in the root of this repository.
-
+* optional but highly recommended [k9s](https://github.com/derailed/k9s) -- many thanks to Tom for this tip!
 ---
 
 ## 🚀 Deployment Guide
