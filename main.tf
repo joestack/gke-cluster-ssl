@@ -25,6 +25,11 @@ resource "google_compute_subnetwork" "subnet" {
   network       = google_compute_network.vpc.id
   project       = var.project_id
 
+  # Terraform will never touch this again after the first apply.
+  lifecycle {
+    ignore_changes = all
+  }
+
   secondary_ip_range {
     range_name    = "pods"
     ip_cidr_range = "10.1.0.0/16"
@@ -124,10 +129,18 @@ resource "google_compute_managed_ssl_certificate" "artifactory" {
 resource "random_password" "db_password" {
   length  = 16
   special = false # Avoid special chars to prevent JDBC URL encoding issues
+  # Terraform will never touch this again after the first apply.
+  lifecycle {
+    ignore_changes = all
+  }
 }
 
 resource "random_id" "db_name_suffix" {
   byte_length = 4
+  # Terraform will never touch this again after the first apply.
+  lifecycle {
+    ignore_changes = all
+  }
 }
 
 # 2. Configure Private Service Access (Required for GKE -> Cloud SQL Private IP)

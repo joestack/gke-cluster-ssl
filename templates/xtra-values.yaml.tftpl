@@ -7,6 +7,11 @@
 # (Required for Curation to function).
 catalog:
   enabled: ${catalog_enabled}
+  database:
+    url: ${catalog_db_url}
+    user: ${catalog_db_user}
+    password: ${catalog_db_password}
+
 
 # 2. JFrog Curation
 # The "Firewall" that actively blocks malicious or highly vulnerable 
@@ -24,3 +29,7 @@ worker:
 # Enables Release Bundle creation and distribution to Edge nodes.
 distribution:
   enabled: ${distribution_enabled}
+  database:
+    url: ${distribution_db_url}
+    user: ${distribution_db_user}
+    password: ${distribution_db_password}

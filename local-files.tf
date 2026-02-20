@@ -1,10 +1,18 @@
 # Generate 32 bytes and output as a 64-character hex string
 resource "random_id" "master_key" {
   byte_length = 32
+  # Terraform will never touch this again after the first apply.
+  lifecycle {
+    ignore_changes = all
+  }
 }
 
 resource "random_id" "join_key" {
   byte_length = 32
+  # Terraform will never touch this again after the first apply.
+  lifecycle {
+    ignore_changes = all
+  }
 }
 
 
@@ -50,6 +58,21 @@ resource "local_sensitive_file" "jfrog_base_values" {
   })
 }
 
+
+locals {
+  # If enabled, build the quoted string. If false, output the unquoted word "null".
+  catalog_db_url           = var.catalog_enable ? "\"postgres://${google_sql_user.catalog_user[0].name}:${random_password.catalog_db_password[0].result}@${google_sql_database_instance.artifactory_db.private_ip_address}:5432/${google_sql_database.catalog_db[0].name}?sslmode=disable\"" : "null" 
+  catalog_db_user          = var.catalog_enable ? "\"${google_sql_user.catalog_user[0].name}\"" : "null" 
+  catalog_db_password      = var.catalog_enable ? "\"${random_password.catalog_db_password[0].result}\"" : "null"
+  # Distribution uses Java/JDBC, so it needs a 'jdbc:postgresql://' format WITHOUT inline credentials
+  distribution_db_url      = var.distribution_enable ? "\"jdbc:postgresql://${google_sql_database_instance.artifactory_db.private_ip_address}:5432/${google_sql_database.distribution_db[0].name}?sslmode=disable\"" : "null"
+  distribution_db_user     = var.distribution_enable ? "\"${google_sql_user.distribution_user[0].name}\"" : "null"
+  distribution_db_password = var.distribution_enable ? "\"${random_password.distribution_db_password[0].result}\"" : "null"
+}
+
+
+
+
 resource "local_file" "jfrog_xtra_values" {
   filename = "${path.module}/generated/xtra-values.yaml"
   
@@ -57,8 +80,14 @@ resource "local_file" "jfrog_xtra_values" {
     # Note: GCP DNS records often return with a trailing dot (e.g., "joe.rod.org.")
     # trimsuffix ensures Kubernetes doesn't throw a validation error on the Ingress host.
     catalog_enabled       = var.catalog_enable
+    catalog_db_url      = local.catalog_db_url
+    catalog_db_user     = local.catalog_db_user
+    catalog_db_password = local.catalog_db_password
     worker_enabled        = var.worker_enable 
     distribution_enabled  = var.distribution_enable
+    distribution_db_url      = local.distribution_db_url
+    distribution_db_user     = local.distribution_db_user
+    distribution_db_password = local.distribution_db_password
   })
 }
 
