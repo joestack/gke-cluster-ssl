@@ -1,0 +1,14 @@
+global:
+  platform:
+    # The external URL of your JFrog Platform
+    url: "https://${dns_hostname}.${gcp_dns_zone}"
+  
+  # The exact same Join Key Xray uses, so the Runtime agents are trusted
+  joinKey: "${join_key}"
+
+# Give this specific K8s cluster a name so it shows up cleanly in the JFrog UI
+clusterName: "${cluster_name}"
+
+# Enable the specific runtime security sensors
+nodeAgent:
+  enabled: true

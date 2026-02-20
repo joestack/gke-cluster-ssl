@@ -32,7 +32,8 @@ helm upgrade --install jfrog-platform jfrog/jfrog-platform \
   --namespace jfrog-platform \
   -f generated/base-values.yaml \
   -f generated/ingress-values.yaml \
-  -f generated/db-values.yaml
+  -f generated/db-values.yaml \
+  -f generated/xtra-values.yaml
 
 # n. Delete the helm chart
 helm uninstall jfrog-platform -n jfrog-platform

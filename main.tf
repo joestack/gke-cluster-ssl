@@ -81,7 +81,7 @@ resource "google_container_node_pool" "primary_nodes" {
   project    = var.project_id
 
   node_config {
-    machine_type    = "e2-standard-4"
+    machine_type    = var.cluster_instance
     service_account = google_service_account.gke_nodes.email
     oauth_scopes    = ["https://www.googleapis.com/auth/cloud-platform"]
     workload_metadata_config { mode = "GKE_METADATA" }
@@ -210,3 +210,46 @@ resource "google_sql_user" "xray" {
   deletion_policy = "ABANDON"
 }
 
+# ==========================================
+# JFrog Catalog Database & User
+# ==========================================
+resource "google_sql_database" "catalog_db" {
+  count    = var.catalog_enable ? 1 : 0
+  name     = "catalog"
+  instance = google_sql_database_instance.artifactory_db.name
+}
+
+resource "random_password" "catalog_db_password" {
+  count    = var.catalog_enable ? 1 : 0
+  length  = 32
+  special = false
+}
+
+resource "google_sql_user" "catalog_user" {
+  count    = var.catalog_enable ? 1 : 0
+  name     = "catalog"
+  instance = google_sql_database_instance.artifactory_db.name
+  password = random_password.catalog_db_password[0].result
+}
+
+# ==========================================
+# JFrog Distribution Database & User
+# ==========================================
+resource "google_sql_database" "distribution_db" {
+  count    = var.distribution_enable ? 1 : 0
+  name     = "distribution"
+  instance = google_sql_database_instance.artifactory_db.name
+}
+
+resource "random_password" "distribution_db_password" {
+  count    = var.distribution_enable ? 1 : 0
+  length  = 32
+  special = false
+}
+
+resource "google_sql_user" "distribution_user" {
+  count    = var.distribution_enable ? 1 : 0
+  name     = "distribution"
+  instance = google_sql_database_instance.artifactory_db.name
+  password = random_password.distribution_db_password[0].result
+}

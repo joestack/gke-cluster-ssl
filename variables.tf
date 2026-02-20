@@ -22,6 +22,11 @@ variable "cluster_name" {
   default     = "joern-gke-cluster"
 }
 
+variable "cluster_instance" {
+  description = "machine type to be used in the GKE cluster"
+  default     = "e2-standard-4"
+}
+
 variable "gcp_dns_zone" {
   description = "DNS Zone"
 }
@@ -44,4 +49,28 @@ variable "db_tier" {
 variable "db_availability_type" {
   description = "REGIONAL for HA or ZONAL"
   default     = "ZONAL"
+}
+
+variable "catalog_enable" {
+  description = "Enble JFrog Catalog/Curation feature"
+  type = bool
+  default = false
+}
+
+variable "distribution_enable" {
+  description = "Enble JFrog Distribution feature"
+  type = bool
+  default = false
+}
+
+variable "runtime_enable" {
+  description = "Enable generation of the JFrog Runtime Security values file"
+  type        = bool
+  default     = false  # Defaults to false to save resources on standard deployments
+}
+
+variable "worker_enable" {
+  description = "Enable JFrog Worker"
+  type        = bool
+  default     = false  
 }

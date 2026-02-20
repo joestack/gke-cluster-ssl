@@ -1,0 +1,26 @@
+# ==========================================
+# JFrog Advanced Security & Extra Features
+# ==========================================
+
+# 1. JFrog Catalog
+# The central intelligence database of global packages and CVEs.
+# (Required for Curation to function).
+catalog:
+  enabled: ${catalog_enabled}
+
+# 2. JFrog Curation
+# The "Firewall" that actively blocks malicious or highly vulnerable 
+# open-source packages from ever entering your Artifactory proxy caches.
+curation:
+  enabled: ${catalog_enabled}
+
+# 3. JFrog Execution Worker
+# The dedicated engine that runs Contextual Analysis, IaC scanning, and Secrets detection.
+# (Fun fact: Enabling this properly handles those K8s batch jobs we saw earlier!)
+worker:
+  enabled: ${worker_enabled}
+
+# 4. JFrog Distribution (Optional)
+# Enables Release Bundle creation and distribution to Edge nodes.
+distribution:
+  enabled: ${distribution_enabled}
