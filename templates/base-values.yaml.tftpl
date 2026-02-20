@@ -10,6 +10,7 @@ global:
 # Application-Specific Toggles
 rabbitmq:
   enabled: true
+  replicaCount: ${replica_count}
 
 # Enables the advanced scanning features in the Xray UI.
 jas:
@@ -17,6 +18,7 @@ jas:
 
 # Xray Specific Configuration
 xray:
+  replicaCount: ${replica_count}
   rbac:
     create: true
   serviceAccount:

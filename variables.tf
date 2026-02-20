@@ -51,6 +51,11 @@ variable "db_availability_type" {
   default     = "ZONAL"
 }
 
+variable "replica_count" {
+  description = "Amount of replicas for RabbitMQ and Xray (HA)"
+  default = "1"
+}
+
 variable "catalog_enable" {
   description = "Enble JFrog Catalog/Curation feature"
   type = bool

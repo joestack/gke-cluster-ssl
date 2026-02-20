@@ -28,6 +28,7 @@ Before applying the Terraform code, you need to define the required variables. T
 | `cluster_instance` | Machine type to be used in the GKE cluster | No | `"e2-standard-4"` |
 | `db_tier` | Cloud SQL machine size / instance tier | No | `"db-custom-4-16384"` |
 | `db_availability_type` | Database availability (`REGIONAL` for HA or `ZONAL`) | No | `"ZONAL"` |
+| `replica_count` | Number of RabbitMQ and Xray instances | No | `"1"` |
 | `catalog_enable` | Enable JFrog Catalog/Curation feature | No | `false` |
 | `distribution_enable` | Enable JFrog Distribution feature | No | `false` |
 | `runtime_enable` | Enable generation of the JFrog Runtime Security values file | No | `false` |

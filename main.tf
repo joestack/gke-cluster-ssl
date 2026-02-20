@@ -216,6 +216,7 @@ resource "google_sql_user" "xray" {
 resource "google_sql_database" "catalog_db" {
   count    = var.catalog_enable ? 1 : 0
   name     = "catalog"
+  project  = var.project_id
   instance = google_sql_database_instance.artifactory_db.name
 }
 
@@ -228,6 +229,7 @@ resource "random_password" "catalog_db_password" {
 resource "google_sql_user" "catalog_user" {
   count    = var.catalog_enable ? 1 : 0
   name     = "catalog"
+  project  = var.project_id
   instance = google_sql_database_instance.artifactory_db.name
   password = random_password.catalog_db_password[0].result
 }
@@ -238,6 +240,7 @@ resource "google_sql_user" "catalog_user" {
 resource "google_sql_database" "distribution_db" {
   count    = var.distribution_enable ? 1 : 0
   name     = "distribution"
+  project  = var.project_id
   instance = google_sql_database_instance.artifactory_db.name
 }
 
@@ -250,6 +253,7 @@ resource "random_password" "distribution_db_password" {
 resource "google_sql_user" "distribution_user" {
   count    = var.distribution_enable ? 1 : 0
   name     = "distribution"
+  project  = var.project_id
   instance = google_sql_database_instance.artifactory_db.name
   password = random_password.distribution_db_password[0].result
 }

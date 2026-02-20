@@ -46,6 +46,7 @@ resource "local_sensitive_file" "jfrog_base_values" {
     hostname       = "https://${trimsuffix(google_dns_record_set.artifactory.name, ".")}"
     gcs_bucket_name = google_storage_bucket.jfrog_filestore.name
     gcp_sa_email    = google_service_account.jfrog_gcs_sa.email
+    replica_count   = var.replica_count
   })
 }
 
