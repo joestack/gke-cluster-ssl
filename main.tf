@@ -101,7 +101,7 @@ data "google_dns_managed_zone" "artifactorytest" {
 }
 
 resource "google_compute_global_address" "artifactory_ip" {
-  name    = "artifactory-ingress-ip"
+  name    = "${var.cluster_name}-rt-in-ip"
   project = var.project_id
 }
 
@@ -115,7 +115,7 @@ resource "google_dns_record_set" "artifactory" {
 }
 
 resource "google_compute_managed_ssl_certificate" "artifactory" {
-  name    = "artifactory-ssl-cert"
+  name    = "${var.cluster_name}-rt-ssl-cert"
   project = var.project_id
   managed {
     domains = ["${var.dns_hostname}.${data.google_dns_managed_zone.artifactorytest.dns_name}"]

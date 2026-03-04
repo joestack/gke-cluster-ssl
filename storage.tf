@@ -1,6 +1,6 @@
 # 1. Create the GCS Bucket
 resource "google_storage_bucket" "jfrog_filestore" {
-  name                        = "${var.project_id}-jfrog-filestore"
+  name                        = "${var.cluster_name}-jfrog-filestore"
   location                    = var.region
   force_destroy               = true # Safe for testing/teardowns
   uniform_bucket_level_access = true
