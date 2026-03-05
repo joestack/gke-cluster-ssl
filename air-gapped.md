@@ -30,7 +30,7 @@ Before deploying, ensure the central Artifactory has the following **Remote Repo
    * **URL:** `https://registry-1.docker.io`
 
 ### 🔑 Generate your Credentials
-1. Go to your JFrog Profile -> **Generate Token**. Or use the **Set me up** feature
+1. Go to your JFrog Profile -> **Generate Token**.
 
 
 ---
