@@ -93,7 +93,7 @@ Configure your local Helm CLI to pull the installation charts from the proxy, th
 **1. Add the Proxy Repository:**
 *(Use your short username, e.g., `joerns`, and your Access Token).*
 ```bash
-helm repo add my-jfrog-proxy [https://solengeu.jfrog.io/artifactory/joe-jfrog-helm-remote/](https://solengeu.jfrog.io/artifactory/joe-jfrog-helm-remote/) \
+helm repo add my-jfrog-proxy https://solengeu.jfrog.io/artifactory/joe-jfrog-helm-remote/ \
   --username <YOUR_SHORT_USERNAME> \
   --password <YOUR_ACCESS_TOKEN>
 ```
