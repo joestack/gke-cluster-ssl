@@ -9,7 +9,7 @@ resource "google_storage_bucket" "jfrog_filestore" {
 
 # 2. Create the GCP Service Account
 resource "google_service_account" "jfrog_gcs_sa" {
-  account_id   = "jfrog-gcs-sa"
+  account_id   = "${var.cluster_name}jfrog-gcs-sa"
   display_name = "JFrog GCS Access"
   project = var.project_id
 }
