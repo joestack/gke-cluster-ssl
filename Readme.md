@@ -66,6 +66,9 @@ You can enable them in your `terraform.tfvars` file.
 Before you begin, ensure you have the following installed and configured:
 * [Terraform](https://www.terraform.io/downloads)
 * [Google Cloud CLI (`gcloud`)](https://cloud.google.com/sdk/docs/install) authenticated to your GCP project.
+  * `brew install gcloud-cli`
+  * `gcloud components install gke-gcloud-auth-plugin`
+  * `gcloud auth application-default login`
 * [Kubernetes CLI (`kubectl`)](https://kubernetes.io/docs/tasks/tools/)
 * [Helm](https://helm.sh/docs/intro/install/)
 * A valid JFrog Artifactory license file named `art.lic` located in the root of this repository.
