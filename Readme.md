@@ -128,6 +128,12 @@ You can monitor the deployment progress by watching the pods:
 kubectl get pods -n jfrog-platform -w
 ```
 
+You can also delete the workload to redeploy the Helm Chart:
+```bash
+helm uninstall jfrog-platform -n jfrog-platform
+kubectl delete pvc --all -n jfrog-platform
+```
+
 ---
 
 ## 🧹 Cleanup and Teardown
