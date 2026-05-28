@@ -30,8 +30,10 @@ Before applying the Terraform code, you need to define the required variables. T
 | `replica_count` | Number of RabbitMQ and Xray instances | No | `"1"` |
 | `catalog_enable` | Enable JFrog Catalog/Curation feature | No | `false` |
 | `distribution_enable` | Enable JFrog Distribution feature | No | `false` |
-| `runtime_enable` | Enable generation of the JFrog Runtime Security values file | No | `false` |
+| `runtime_enable` | Enable generation of the JFrog Runtime Security values file (not working) | No | `false` |
 | `worker_enable` | Enable JFrog Execution Worker (for Contextual Analysis) | No | `false` |
+| `apptrust_enable` | Enable JFrog AppTrust (software supply-chain integrity verification) | No | `false` |
+| `unifiedpolicy_enable` | Enable JFrog Unified Policy engine | No | `false` |
 ---
 
 ### 🛑 A Friendly Disclaimer: Walk Before You Run
@@ -57,6 +59,8 @@ You can enable them in your `terraform.tfvars` file.
 * **`worker_enable` (JFrog Execution Worker):** Enables the dedicated scanning engine for Contextual Analysis, Infrastructure as Code (IaC) scanning, and Secrets detection. It works by dynamically spinning up temporary Kubernetes Batch Jobs to perform deep scans on your containers.
 * **`distribution_enable` (JFrog Distribution):** Spins up the Distribution microservice, allowing you to package immutable Release Bundles and distribute them securely to remote edge nodes. *(Note: Terraform automatically provisions the required dedicated Cloud SQL database for this when enabled).*
 * **`runtime_enable` (JFrog Runtime Security):** Generates a dedicated `runtime-values.yaml` file and provides the exact Helm command needed to deploy Runtime K8s sensors. These lightweight DaemonSets monitor live cluster traffic and match running workloads against your Xray vulnerability database.
+* **`apptrust_enable` (JFrog AppTrust):** Enables the AppTrust microservice, which provides software supply-chain integrity verification by signing and verifying artifacts throughout their lifecycle. When enabled, Terraform injects the `apptrust` block into `base-values.yaml`, pointing it at your external JFrog URL so it can verify artifact provenance end-to-end.
+* **`unifiedpolicy_enable` (JFrog Unified Policy):** Activates the Unified Policy engine, which allows you to define and enforce a single, consistent set of security and compliance policies across Artifactory, Xray, Curation, and Distribution from one place.
 
 > **⚠️ Compute & License Warning:** > Enabling these features (especially Catalog and Worker) requires significant CPU and memory. If you set these to `true`, ensure your `cluster_instance` variable is set to a robust machine type (e.g., `e2-standard-8`) and your cluster can autoscale. These features also require an active **Enterprise X** or **Enterprise+** license.
 
