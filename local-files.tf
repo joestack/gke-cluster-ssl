@@ -55,6 +55,8 @@ resource "local_sensitive_file" "jfrog_base_values" {
     gcs_bucket_name = google_storage_bucket.jfrog_filestore.name
     gcp_sa_email    = google_service_account.jfrog_gcs_sa.email
     replica_count   = var.replica_count
+    apptrust_enable = var.apptrust_enable
+    unifiedpolicy_enable = var.unifiedpolicy_enable
   })
 }
 

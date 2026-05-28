@@ -79,3 +79,15 @@ variable "worker_enable" {
   type        = bool
   default     = false  
 }
+
+variable "apptrust_enable" {
+  description = "Enable JFrog AppTrust"
+  type        = bool
+  default     = false  
+}
+
+variable "unifiedpolicy_enable" {
+  description = "Enable JFrog Unified Policy"
+  type        = bool
+  default     = false  
+}

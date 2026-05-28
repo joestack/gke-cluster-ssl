@@ -71,3 +71,14 @@ artifactory:
               <useInstanceCredentials>true</useInstanceCredentials>
           </provider>
       </config>
+
+  apptrust:
+    enabled: ${apptrust_enable}
+    jfrogUrl: "${hostname}"   # your external base URL
+    replicaCount: 1
+    image:
+      registry: releases-docker.jfrog.io
+      repository: jfrog/apptrust
+      #tag: 7.133.17    # match your Artifactory version
+  unifiedpolicy:
+    enabled: ${unifiedpolicy_enable}

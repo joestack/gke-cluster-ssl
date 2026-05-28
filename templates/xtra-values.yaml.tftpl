@@ -7,11 +7,14 @@
 # (Required for Curation to function).
 catalog:
   enabled: ${catalog_enabled}
+  cache:
+    enabled: true
   database:
     url: ${catalog_db_url}
     user: ${catalog_db_user}
     password: ${catalog_db_password}
-
+  valkey:
+    enabled: true
 
 # 2. JFrog Curation
 # The "Firewall" that actively blocks malicious or highly vulnerable 
